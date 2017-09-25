@@ -33,7 +33,8 @@ RUN \
 	unzip /tmp/terraform.zip -d / && \
 	mv /terraform /usr/bin/ && \
   mv /go-agent-17.8.0 /go-agent && \
-  rm /tmp/go-agent.zip
+  rm /tmp/go-agent.zip && \
+  rm /tmp/terraform.zip
 
 ADD docker-entrypoint.sh /
 
