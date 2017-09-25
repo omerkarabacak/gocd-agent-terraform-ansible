@@ -27,12 +27,13 @@ RUN \
   apk add --no-cache openjdk8-jre-base git mercurial subversion openssh-client bash curl ansible && \
 # download the zip file
   curl --fail --location --silent --show-error "https://download.gocd.org/binaries/17.8.0-5277/generic/go-agent-17.8.0-5277.zip" > /tmp/go-agent.zip && \
+	curl --fail --location --silent --show-error "https://releases.hashicorp.com/terraform/0.10.6/terraform_0.10.6_linux_amd64.zip?_ga=2.248615364.279314359.1506357434-1981675648.1506108613" > /tmp/terraform.zip && \
 # unzip the zip file into /go-agent, after stripping the first path prefix
   unzip /tmp/go-agent.zip -d / && \
+	unzip /tmp/terraform.zip -d / && \
+	mv /terraform /usr/bin/ && \
   mv /go-agent-17.8.0 /go-agent && \
   rm /tmp/go-agent.zip
-
-RUN go get github.com/hashicorp/terraform
 
 ADD docker-entrypoint.sh /
 
