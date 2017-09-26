@@ -1,4 +1,4 @@
-
+FROM gzm55/vpn-client as openconnect
 
 FROM golang:alpine3.6
 
@@ -24,7 +24,9 @@ RUN \
   addgroup -g 1000 go && \
   adduser -D -u 1000 -G go go && \
   apk --no-cache upgrade && \
-  apk add --no-cache openjdk8-jre-base git mercurial subversion openssh-client bash curl ansible && \
+  apk add --no-cache openjdk8-jre-base git mercurial subversion openssh-client bash curl ansible \
+	supervisor lz4-libs gnutls gnutls-utils iptables libev libintl \
+	libnl3 libseccomp linux-pam lz4 openssl libxml2 nmap-ncat socat openssh-client && \
 # download the zip file
   curl --fail --location --silent --show-error "https://download.gocd.org/binaries/17.8.0-5277/generic/go-agent-17.8.0-5277.zip" > /tmp/go-agent.zip && \
 	curl --fail --location --silent --show-error "https://releases.hashicorp.com/terraform/0.10.6/terraform_0.10.6_linux_amd64.zip?_ga=2.248615364.279314359.1506357434-1981675648.1506108613" > /tmp/terraform.zip && \
@@ -36,8 +38,19 @@ RUN \
   rm /tmp/go-agent.zip && \
   rm /tmp/terraform.zip
 
+#### openconnect setup ####
+
+COPY --from=openconnect /usr/local/lib /usr/local/lib
+COPY --from=openconnect /usr/local/sbin /usr/local/sbin
+
+#### running setup ###
+COPY supervisord.conf /etc/supervisord.conf
+
 ADD docker-entrypoint.sh /
 
-RUN ["chmod", "+x", "/docker-entrypoint.sh"]
+ADD start-openconnect.sh /
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+RUN ["chmod", "+x", "/docker-entrypoint.sh"]
+RUN ["chmod", "+x", "/start-openconnect.sh"]
+
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
