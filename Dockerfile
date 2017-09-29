@@ -44,7 +44,6 @@ RUN mkdir -p /etc/vpnc
 COPY --from=openconnect /usr/local/lib /usr/local/lib
 COPY --from=openconnect /usr/local/sbin /usr/local/sbin
 COPY vpnc-script /etc/vpnc/vpnc-script
-COPY vpnc-script-no-dns /etc/vpnc/vpnc-script-no-dns
 
 #### running setup ###
 COPY supervisord.conf /etc/supervisord.conf
@@ -55,7 +54,6 @@ ADD start-openconnect.sh /
 
 RUN ["chmod", "+x", "/docker-entrypoint.sh"]
 RUN ["chmod", "+x", "/etc/vpnc/vpnc-script"]
-RUN ["chmod", "+x", "/etc/vpnc/vpnc-script-no-dns"]
 RUN ["chmod", "+x", "/start-openconnect.sh"]
 
 ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

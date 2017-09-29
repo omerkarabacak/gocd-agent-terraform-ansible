@@ -1,3 +1,0 @@
-#!/bin/bash
-unset INTERNAL_IP4_DNS
-exec /etc/vpnc/vpnc-script "$@"
