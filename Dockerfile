@@ -1,6 +1,6 @@
 FROM gzm55/vpn-client as openconnect
 
-FROM alpine:3.6
+FROM golang:alpine
 
 ADD https://github.com/krallin/tini/releases/download/v0.15.0/tini-static-amd64 /usr/local/sbin/tini
 ADD https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 /usr/local/sbin/gosu
@@ -51,6 +51,7 @@ COPY supervisord.conf /etc/supervisord.conf
 ADD docker-entrypoint.sh /
 
 ADD start-openconnect.sh /
+
 
 RUN ["chmod", "+x", "/docker-entrypoint.sh"]
 RUN ["chmod", "+x", "/etc/vpnc/vpnc-script"]

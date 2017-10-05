@@ -378,9 +378,9 @@ modify_resolvconf_generic() {
 	while read LINE <&6 ; do
 		case "$LINE" in
 			# omit; we will overwrite these
-			nameserver*) ;;
+		#	nameserver*) ;;
 			# extract listed domains and prepend to list
-			domain* | search*) DOMAINS="${LINE#* } $DOMAINS" ;;
+		#	domain* | search*) DOMAINS="${LINE#* } $DOMAINS" ;;
 			# retain other lines
 			*) NEW_RESOLVCONF="$NEW_RESOLVCONF
 $LINE" ;;
